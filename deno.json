@@ -1,6 +1,7 @@
 {
   "tasks": {
     "start": "deno run --allow-net --allow-read --allow-write --allow-env --env-file=.env server.ts",
+    "stop": "sh -c 'set -a; . ./.env; set +a; fuser -TERM -k \"${PORT}/tcp\" 2>/dev/null || true'",
     "check": "deno check server.ts"
   },
   "fmt": { "lineWidth": 140, "semiColons": true, "singleQuote": false }
