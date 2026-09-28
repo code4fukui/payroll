@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Timecard Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="app-shell">
+    <header class="hero">
+      <div>
+        <p class="eyebrow">TIME CARD / PAYROLL</p>
+        <h1>稼働状況ダッシュボード</h1>
+        <p class="subtitle">timecard.csvから、月ごとの日別稼働時間と支給額を確認します。</p>
+      </div>
+      <div class="hero-actions"><a id="admin-link" class="admin-link hidden" href="/admin.html">利用者管理</a><a class="admin-link" href="/mypage.html">マイページ</a><label class="upload-button">CSVを読み込む<input id="csv-input" type="file" accept=".csv,text/csv" multiple></label></div>
+    </header>
+
+    <section id="status" class="status" aria-live="polite">CSVを読み込んでいます…</section>
+
+    <section class="panel chart-panel">
+      <div class="section-heading"><div><p class="eyebrow">MONTHLY PAY</p><h2>月ごとの総支給額</h2></div><span class="muted">棒をクリックして月を選択</span></div>
+      <div id="monthly-pay-chart" class="monthly-pay-chart"></div>
+    </section>
+
+    <section class="controls panel">
+      <div>
+        <label for="month-select">表示する月</label>
+        <select id="month-select" disabled></select>
+      </div>
+      <div class="legend"><span class="dot work"></span> 稼働あり <span class="dot off"></span> 稼働なし</div>
+    </section>
+
+    <section class="panel member-legend-panel">
+      <div class="section-heading"><div><p class="eyebrow">MEMBERS</p><h2>メンバー凡例</h2></div></div>
+      <div id="member-legend" class="member-legend"></div>
+    </section>
+
+    <section class="summary-grid">
+      <article class="summary-card accent-blue"><span>月間稼働時間</span><strong id="month-hours">—</strong></article>
+      <article class="summary-card accent-orange"><span>月間支給額</span><strong id="month-pay">—</strong></article>
+      <article class="summary-card accent-green"><span>稼働日数</span><strong id="work-days">—</strong></article>
+      <article class="summary-card accent-purple"><span>稼働メンバー</span><strong id="member-count">—</strong></article>
+    </section>
+
+    <section class="panel">
+      <div class="section-heading">
+        <div><p class="eyebrow">DAILY VIEW</p><h2>日ごとの稼働状況</h2></div>
+        <span id="record-count" class="muted"></span>
+      </div>
+      <div class="table-wrap">
+        <table id="daily-table">
+          <thead></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="section-heading">
+        <div><p class="eyebrow">MEMBER MATRIX</p><h2>メンバー別・日別</h2></div>
+        <span class="muted">単位：時間</span>
+      </div>
+      <div class="table-wrap matrix-wrap">
+        <table id="member-table"><thead></thead><tbody></tbody></table>
+      </div>
+    </section>
+
+    <footer>ブラウザ内だけで処理しています。CSVデータは外部へ送信されません。</footer>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
