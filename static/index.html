@@ -20,8 +20,9 @@
     <section id="status" class="status" aria-live="polite">CSVを読み込んでいます…</section>
 
     <section class="panel chart-panel">
-      <div class="section-heading"><div><p class="eyebrow">MONTHLY PAY</p><h2>月ごとの総支給額</h2></div><span class="muted">棒をクリックして月を選択</span></div>
+      <div class="section-heading"><div><p class="eyebrow">MONTHLY PAY</p><h2>月ごとの総支払額</h2></div><div class="chart-tools"><div class="chart-legend"><span><i class="legend-swatch pay"></i>支給額</span><span><i class="legend-swatch expense"></i>経費</span><span><i class="legend-swatch transportation"></i>交通費</span></div><label for="year-select">表示年<select id="year-select" disabled></select></label></div></div>
       <div id="monthly-pay-chart" class="monthly-pay-chart"></div>
+      <div class="annual-total-grid" aria-label="年合計"><div class="annual-total-card"><span>総支払額合計</span><strong id="annual-total-payment">—</strong></div><div class="annual-total-card"><span>総支給額合計</span><strong id="annual-total-pay">—</strong></div><div class="annual-total-card"><span>総交通費合計</span><strong id="annual-total-transportation">—</strong></div><div class="annual-total-card"><span>総経費合計</span><strong id="annual-total-expense">—</strong></div></div>
     </section>
 
     <section class="controls panel">
@@ -32,12 +33,11 @@
       <div class="legend"><span class="dot work"></span> 稼働あり <span class="dot off"></span> 稼働なし</div>
     </section>
 
-    <section class="panel member-legend-panel">
-      <div class="section-heading"><div><p class="eyebrow">MEMBERS</p><h2>メンバー凡例</h2></div></div>
-      <div id="member-legend" class="member-legend"></div>
-    </section>
-
     <section class="summary-grid">
+      <article class="summary-card accent-purple"><span>総支払額</span><strong id="total-payment">—</strong></article>
+      <article class="summary-card accent-blue"><span>支給額合計（固定を含む）</span><strong id="total-pay">—</strong></article>
+      <article class="summary-card accent-orange"><span>交通費合計</span><strong id="total-transportation">—</strong></article>
+      <article class="summary-card accent-green"><span>経費合計</span><strong id="total-expense">—</strong></article>
       <article class="summary-card accent-blue"><span>月間稼働時間</span><strong id="month-hours">—</strong></article>
       <article class="summary-card accent-orange"><span>月間支給額</span><strong id="month-pay">—</strong></article>
       <article class="summary-card accent-green"><span>稼働日数</span><strong id="work-days">—</strong></article>
@@ -46,24 +46,24 @@
 
     <section class="panel">
       <div class="section-heading">
+        <div><p class="eyebrow">MEMBER SUMMARY</p><h2>メンバー別</h2></div>
+        <div class="section-actions"><span class="muted">表示中の月</span><button id="download-member-csv" class="download-button" type="button">CSVダウンロード</button></div>
+      </div>
+      <div class="table-wrap matrix-wrap">
+        <table id="member-table"><thead></thead><tbody></tbody></table>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="section-heading">
         <div><p class="eyebrow">DAILY VIEW</p><h2>日ごとの稼働状況</h2></div>
-        <span id="record-count" class="muted"></span>
+        <div class="section-actions"><span id="record-count" class="muted"></span><button id="download-daily-csv" class="download-button" type="button">CSVダウンロード</button></div>
       </div>
       <div class="table-wrap">
         <table id="daily-table">
           <thead></thead>
           <tbody></tbody>
         </table>
-      </div>
-    </section>
-
-    <section class="panel">
-      <div class="section-heading">
-        <div><p class="eyebrow">MEMBER MATRIX</p><h2>メンバー別・日別</h2></div>
-        <span class="muted">単位：時間</span>
-      </div>
-      <div class="table-wrap matrix-wrap">
-        <table id="member-table"><thead></thead><tbody></tbody></table>
       </div>
     </section>
 
