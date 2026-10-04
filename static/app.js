@@ -1,4 +1,11 @@
-const state = { records: [], months: new Map(), expenses: new Map(), monthlyTotals: new Map(), fixedFees: [], years: [], currentYear: String(new Date().getFullYear()), currentMonth: '' };
+function previousMonth() {
+  const date = new Date();
+  date.setDate(1);
+  date.setMonth(date.getMonth() - 1);
+  return { year: String(date.getFullYear()), month: String(date.getMonth() + 1).padStart(2, '0') };
+}
+const initialMonth = previousMonth();
+const state = { records: [], months: new Map(), expenses: new Map(), monthlyTotals: new Map(), fixedFees: [], years: [], currentYear: initialMonth.year, currentMonth: `${initialMonth.year}-${initialMonth.month}` };
 const $ = (id) => document.getElementById(id);
 
 function normalize(value) { return (value || '').normalize('NFKC').replace(/\s+/g, ''); }
@@ -47,7 +54,7 @@ async function loadData(files) {
   const fixedFeeHeaders = Object.keys(fixedFeeRows[0] || {}); const fixedFeeName = keyOf(fixedFeeHeaders, ['名前']); const fixedFeeStart = keyOf(fixedFeeHeaders, ['開始月']); const fixedFeeAmount = keyOf(fixedFeeHeaders, ['月給']); const fixedFees = fixedFeeRows.map(row => ({ name: row[fixedFeeName].trim(), startMonth: row[fixedFeeStart].trim(), amount: Number((row[fixedFeeAmount] || '').replace(/[¥￥,\s]/g, '')) || 0 })).filter(item => /^\d{4}-\d{1,2}$/.test(item.startMonth) && item.amount > 0).map(item => ({ ...item, startMonth: item.startMonth.replace(/-(\d)$/, '-0$1') }));
   state.records = records; state.expenses = expenses; state.monthlyTotals = monthlyTotals; state.fixedFees = fixedFees; state.months = new Map();
   records.forEach(r => { if (!state.months.has(r.month)) state.months.set(r.month, []); state.months.get(r.month).push(r); });
-  state.years = [...new Set([String(new Date().getFullYear()), ...records.map(r => String(r.year))])].sort((a, b) => b.localeCompare(a)); $('year-select').innerHTML = state.years.map(year => `<option value="${year}">${year}年</option>`).join(''); $('year-select').disabled = false; state.currentYear = state.years.includes(state.currentYear) ? state.currentYear : state.years[0]; $('year-select').value = state.currentYear; updateMonthSelect(); state.currentMonth = `${state.currentYear}-01`; $('month-select').value = state.currentMonth; render(); renderMonthlyPayChart();
+  state.years = [...new Set([String(new Date().getFullYear()), initialMonth.year, ...records.map(r => String(r.year))])].sort((a, b) => b.localeCompare(a)); $('year-select').innerHTML = state.years.map(year => `<option value="${year}">${year}年</option>`).join(''); $('year-select').disabled = false; state.currentYear = state.years.includes(state.currentYear) ? state.currentYear : state.years[0]; $('year-select').value = state.currentYear; updateMonthSelect(); state.currentMonth = state.currentYear === initialMonth.year ? `${initialMonth.year}-${initialMonth.month}` : `${state.currentYear}-01`; $('month-select').value = state.currentMonth; render(); renderMonthlyPayChart();
   const unmatched = records.filter(r => r.role === '要確認').map(r => r.name); const unique = [...new Set(unmatched)];
   $('status').textContent = `${records.length.toLocaleString()}件の勤務記録を読み込みました。${unique.length ? ` 要確認: ${unique.join('、')}` : ' 職種・時給の照合も完了しています。'}`; $('status').classList.toggle('error', unique.length > 0);
 }
